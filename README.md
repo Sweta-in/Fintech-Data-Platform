@@ -88,6 +88,23 @@ def ingest_transactions():
     df["created_at"] = pd.to_datetime(df["created_at"])
     return df
 
+
+
+##Schema normalization & basic validation
+
+def ingest_transactions():
+    df = pd.read_csv("data/raw_transactions.csv")
+    df["amount"] = df["amount"].astype(float)
+    df["created_at"] = pd.to_datetime(df["created_at"])
+
+    # basic cleaning
+    df = df.drop_duplicates(subset=["transaction_ref"])
+    df = df[df["amount"] > 0]
+
+    return df
+
+
+
 if __name__ == "__main__":
     df = ingest_transactions()
     df.to_parquet("batch/output/transactions.parquet")
