@@ -78,9 +78,3 @@ python batch/scripts/aggregate_metrics.py
 ---
 
 
-
-    SUM(amount) AS total_amount
-FROM transactions
-GROUP BY DATE(created_at);
-
-
