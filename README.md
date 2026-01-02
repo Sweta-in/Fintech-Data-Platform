@@ -55,4 +55,41 @@ The platform combines **real-time REST APIs** with **batch data pipelines** for 
 ---
 
 ## Batch Pipeline Overview
+Raw Transactions
+↓
+Cleaning & Validation
+↓
+Aggregation (Daily Metrics)
+↓
+Parquet Analytics Output
+
+---
+
+## Running Locally
+
+```bash
+docker-compose up --build
+
+
+Batch jobs:
+python batch/scripts/ingest_transactions.py
+python batch/scripts/aggregate_metrics.py
+
+
+
+### `ingest_transactions.py`
+
+```python
+import pandas as pd
+
+def ingest_transactions():
+    df = pd.read_csv("data/raw_transactions.csv")
+    df["amount"] = df["amount"].astype(float)
+    df["created_at"] = pd.to_datetime(df["created_at"])
+    return df
+
+if __name__ == "__main__":
+    df = ingest_transactions()
+    df.to_parquet("batch/output/transactions.parquet")
+
 
